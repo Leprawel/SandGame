@@ -4,8 +4,9 @@
 #include <cstdlib>
 #include <SFML/Graphics.hpp>
 #include "SandWorld.hpp"
-#include "CellType.hpp"
+#include "CellBase.hpp"
 #include "Sand.hpp"
+#include "Water.hpp"
 
 void DrawSandWorld(const SandWorld& world, sf::RenderWindow& window) {
 	unsigned int width = world.GetWidth();
@@ -16,7 +17,7 @@ void DrawSandWorld(const SandWorld& world, sf::RenderWindow& window) {
 
 	for (unsigned int y = 0; y < height; y++) {
 		for (unsigned int x = 0; x < width; x++) {
-			sf::Color cl = world.GetType(x, y)->color;
+			sf::Color cl = world.ColorAt(x, y);
 			color[(y * width + x) * 4] = cl.r;
 			color[(y * width + x) * 4 + 1] = cl.g;
 			color[(y * width + x) * 4 + 2] = cl.b;
@@ -31,7 +32,7 @@ void DrawSandWorld(const SandWorld& world, sf::RenderWindow& window) {
 }
 
 void RunSimulation(SandWorld& world, sf::RenderWindow& window, float maxFps = 0) {
-	//std::chrono::high_resolution_clock::time_point lastFrame = std::chrono::high_resolution_clock::now();
+	std::chrono::high_resolution_clock::time_point lastFrame = std::chrono::high_resolution_clock::now();
 
 	while (window.isOpen())
 	{
@@ -51,91 +52,33 @@ void RunSimulation(SandWorld& world, sf::RenderWindow& window, float maxFps = 0)
 		world.Update();
 		std::cout << "Update FPS: " << 1/std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - start).count() << "\n";
 
-		world.Set(300, 0, 1);
-		world.Set(400, 0, 1);
-		world.Set(500, 0, 1);
-		world.Set(600, 0, 1);
-		world.Set(700, 0, 1);
-		world.Set(551, 700, 2);
-		world.Set(552, 700, 2);
-		world.Set(553, 700, 2);
-		world.Set(554, 700, 2);
-		world.Set(555, 700, 2);
-		world.Set(556, 700, 2);
+		world.SetAtRatio(0.4, 0.1, new Sand());
+		world.SetAtRatio(0.55, 0.1, new Sand());
+		world.SetAtRatio(0.6, 0.1, new Sand());
+		world.SetAtRatio(0.49, 0.6, new Water());
+		world.SetAtRatio(0.5, 0.6, new Water());
+		world.SetAtRatio(0.51, 0.6, new Water());
 
 		window.display();
 
-		/*std::chrono::high_resolution_clock::time_point newFrame = std::chrono::high_resolution_clock::now();
+		std::chrono::high_resolution_clock::time_point newFrame = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> deltaTime = std::chrono::duration_cast<std::chrono::duration<double>>(newFrame - lastFrame);
 		if (maxFps > 0 && deltaTime.count() < 1/maxFps) {
 			std::this_thread::sleep_for(std::chrono::duration<float>(1 / maxFps) - deltaTime);
-		}*/
+		}
 		//std::cout << "\nFps: " << 1 / std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - lastFrame).count();
-		//lastFrame = newFrame;
+		lastFrame = newFrame;
 	}
 }
-
-//void sandFunc(unsigned int * result, unsigned int x, unsigned int y, const SandWorld& world) {
-//	result[0] = x;
-//	result[1] = y;
-//	if (world.GetWithBorders(x, y + 1) == 0) {
-//		result[0] = x;
-//		result[1] = y + 1;
-//	}
-//	else if (world.GetWithBorders(x - 1, y + 1) == 0) {
-//		result[0] = x - 1;
-//		result[1] = y + 1;
-//	}
-//	else if (world.GetWithBorders(x + 1, y + 1) == 0) {
-//		result[0] = x + 1;
-//		result[1] = y + 1;
-//	}
-//}
-
-//void waterFunc(unsigned int* result, unsigned int x, unsigned int y, const SandWorld& world) {
-//	result[0] = x;
-//	result[1] = y;
-//	bool bul = rand() % 2;
-//	if (world.GetWithBorders(x, y + 1) == 0) {
-//		result[0] = x;
-//		result[1] = y + 1;
-//	}
-//	else
-//	{
-//		bool left = world.GetWithBorders(x - 1, y + 1) == 0;
-//		bool right = world.GetWithBorders(x + 1, y + 1) == 0;
-//		if (left && !right || (bul && left && right)) {
-//			result[0] = x - 1;
-//			result[1] = y + 1;
-//		}
-//		else if (right && !left || (!bul && left && right)) {
-//			result[0] = x + 1;
-//			result[1] = y + 1;
-//		}
-//		else {
-//			bool left = world.GetWithBorders(x - 1, y) == 0;
-//			bool right = world.GetWithBorders(x + 1, y) == 0;
-//			if (left && !right || (bul && left && right)) {
-//				result[0] = x - 1;
-//				result[1] = y;
-//			}
-//			else if (right && !left || (!bul && left && right)) {
-//				result[0] = x + 1;
-//				result[1] = y;
-//			}
-//		}
-//	}
-//}
 
 int main()
 {
 	srand(time(0));
-	unsigned int width = 1600;
-	unsigned int height = 900;
+	unsigned int width = 500;
+	unsigned int height = 500;
 	SandWorld world(width, height, 0);
-	world.SetCellType(new Sand());
 
-	sf::RenderWindow window(sf::VideoMode(width, height), "Conways Game of Life!");
+	sf::RenderWindow window(sf::VideoMode(width, height), "Sand World!");
 
 	RunSimulation(world, window);
 

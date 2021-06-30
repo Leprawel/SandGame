@@ -1,20 +1,30 @@
 #include "Sand.hpp"
 
-Sand::Sand() : CellType(1, "Sand", sf::Color(255, 255, 255, 255)) {}
+Sand::Sand() : CellBase(1, "Sand", sf::Color(255, 255, 255, 255)) {}
 
-void Sand::CalculateRule(unsigned int* result, unsigned int x, unsigned int y, const SandWorld& world){
-	result[0] = x;
-	result[1] = y;
-	if (world.GetWithBorders(x, y + 1) == 0) {
+void Sand::ExecuteBehaviour(unsigned int x, unsigned int y, SandWorld& world){
+	int result[2] = { x, y };
+	CellBase* check = world.At(x, y + 1);
+	if (check->id == 0 || check->id == 2) {
 		result[0] = x;
 		result[1] = y + 1;
 	}
-	else if (world.GetWithBorders(x - 1, y + 1) == 0) {
-		result[0] = x - 1;
-		result[1] = y + 1;
+	else {
+		check = world.At(x - 1, y + 1);
+		if (check->id == 0 || check->id == 2) {
+			result[0] = x - 1;
+			result[1] = y + 1;
+		}
+		else {
+			check = world.At(x + 1, y + 1);
+			if (check->id == 0 || check->id == 2) {
+				result[0] = x + 1;
+				result[1] = y + 1;
+			}
+		}
 	}
-	else if (world.GetWithBorders(x + 1, y + 1) == 0) {
-		result[0] = x + 1;
-		result[1] = y + 1;
-	}
+	world.Move(x, y, result[0], result[1]);
+	world.MarkComputed(result[0], result[1]);
 }
+
+void Sand::Reset() {};

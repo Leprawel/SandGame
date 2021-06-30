@@ -1,9 +1,10 @@
 #pragma once
 #include "CellBase.hpp"
 
-class Sand : public CellBase {
+class Water : public CellBase {
 public:
-	Sand();
+
+	Water();
 
 	void ExecuteBehaviour(unsigned int x, unsigned int y, SandWorld& world) override;
 

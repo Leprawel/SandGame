@@ -21,7 +21,7 @@
     <ClCompile Include="SandWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CellType.cpp">
+    <ClCompile Include="CellBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sand.cpp">
@@ -30,18 +30,30 @@
     <ClCompile Include="Void.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Water.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Border.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SandWorld.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CellType.hpp">
+    <ClInclude Include="CellBase.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sand.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Void.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Water.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Border.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

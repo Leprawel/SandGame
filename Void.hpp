@@ -1,9 +1,11 @@
 #pragma once
-#include "CellType.hpp"
+#include "CellBase.hpp"
 
-class Void : public CellType {
+class Void : public CellBase {
 public:
 	Void();
 
-	void CalculateRule(unsigned int* result, unsigned int x, unsigned int y, const SandWorld& world) override;
+	void ExecuteBehaviour(unsigned int x, unsigned int y, SandWorld& world) override;
+
+	void Reset() override;
 };
